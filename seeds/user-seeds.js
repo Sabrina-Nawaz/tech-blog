@@ -1,5 +1,4 @@
-const sequelize = require("../config/connection");
-const { User } = require('../models/')
+const { User } = require("../models/");
 
 const userInfo = [
   {
@@ -24,8 +23,6 @@ const userInfo = [
   },
 ];
 
-const seedUsers = async () => {
-  await sequelize.sync({ force: true });
+const seedUsers = () => User.bulkCreate(userInfo);
 
-  const users = await User.bulkCreate(userInfo);
-};
+module.exports = seedUsers;
