@@ -42,3 +42,43 @@ router.get('/', withAuth, async (req, res) => {
 });
 
 // Get ONE post for the dashboard
+router.get('/edit/:id', withAuth, async (req, res) => {
+  try {
+    const oneDBPost = await Post.findOne({
+      where: {
+        id: req.params.id,
+      },
+      attributes: ['id', 'post_title', 'post_body', 'created_at'],
+      include: [
+        {
+          model: Comment,
+          attributes: [
+            'id',
+            'comment_text',
+            'post_id',
+            'user_id',
+            'created_at',
+          ],
+          include: {
+            model: User,
+            attributes: ['username'],
+          },
+        },
+        {
+          model: User,
+          attributes: ['username'],
+        },
+      ],
+    });
+    if (!oneDBPost) {
+      res.status(404).json({ message: 'No post with this id found' });
+      return;
+    }
+    // Serialize data so the template can read it
+    const post = allDBPosts.map((post) => post.get({ plain: true }));
+    // Pass serialized data and session flag into template
+    res.render('edit-post', { post, logged_in: true });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
