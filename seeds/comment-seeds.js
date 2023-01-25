@@ -13,7 +13,7 @@ const commentInfo = [
   },
   {
     user_id: 2,
-    post_id: 5,
+    post_id: 3,
     comment_text: 'Please go live ASAP!',
   },
 ];
