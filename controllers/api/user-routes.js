@@ -16,10 +16,9 @@ router.get('/', async (req, res) => {
 });
 // Get ONE User
 router.get('/:id', async (req, res) => {
-  // find one category by its `id` value
+  // find one user by its `id` value
   try {
     const singleUser = await User.findOne({
-      // be sure to include its associated Products
       attributes: { exclude: ['password'] },
       where: { id: req.params.id },
       include: [
@@ -106,16 +105,14 @@ router.post('/logout', (req, res) => {
   }
 });
 
-module.exports = router;
-
 //Update a User
 router.put('/:id', (req, res) => {
   User.update(req.body, {
     individualHooks: true,
     where: {
-        id: req.params.id
-    }
-  }
+      id: req.params.id,
+    },
+  })
     .then((updatedUser) => {
       res.json(updatedUser);
     })
@@ -138,4 +135,4 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-module.exports = router; 
+module.exports = router;
